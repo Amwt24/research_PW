@@ -13,6 +13,8 @@ This repository is a research project on tools for using and managing React.
 
 **Assigned Hooks:** useMemo, useCallback, useLayoutEffect, useInsertionEffect, useSyncExternalStore.
 
+**Hook Usage Note:** Exercise 1 emphasizes useMemo and useCallback, while Exercise 2 emphasizes useLayoutEffect, useInsertionEffect, and useSyncExternalStore.
+
 ### Exercise 1: Administration Dashboard with Caching
 **Context:** Create a user table that retrieves data from an API.
 
@@ -21,12 +23,14 @@ This repository is a research project on tools for using and managing React.
 ### Exercise 2: Profile Editor with Real-Time Validation
 **Context:** Editing form with persistence.
 
-**Tech Stack:** Material UI, Formik, Zod, useLayoutEffect (for adjusting DOM measures), useSyncExternalStore (to sync with an external store).
+**Tech Stack:** Material UI, Formik, Zod, useLayoutEffect (for adjusting DOM measures), useInsertionEffect (for CSS-in-JS style injection), useSyncExternalStore (to sync with an external store).
 
 ## Kevin: Focus on State, Flows, and Functional UI
 **Key Tools:** Tailwind CSS, Zustand, React Router, Jest.
 
 **Assigned Hooks:** useReducer, useRef, useId, useTransition, useDeferredValue.
+
+**Hook Usage Note:** Exercise 3 emphasizes useReducer and useRef, while Exercise 4 emphasizes useTransition, useDeferredValue, and useId.
 
 ### Exercise 3: Shopping Cart with Persistence
 **Context:** A store system where the cart state persists across pages.
@@ -42,6 +46,8 @@ This repository is a research project on tools for using and managing React.
 **Key Tools:** Chakra UI, React Hook Form, Cypress, Redux Toolkit.
 
 **Assigned Hooks:** useState, useEffect, useContext, useActionState, useFormStatus, useOptimistic, useDebugValue.
+
+**Hook Usage Note:** Exercise 5 emphasizes useState, useEffect, useContext, useActionState, useFormStatus, and useOptimistic; Exercise 6 focuses on useDebugValue.
 
 ### Exercise 5: Complete Authentication System
 **Context:** Registration and Login with error handling and global state.
