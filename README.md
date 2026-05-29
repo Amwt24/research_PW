@@ -39,7 +39,7 @@ This repository is a research project on tools for using and managing React.
 **Tech Stack:** Tailwind CSS, React Router, useTransition and useDeferredValue (to avoid UI blocking during search), useId (for accessibility in inputs).
 
 ## Amawta: Focus on Advanced Hooks, Forms, and Quality
-**Key Tools:** Chakra UI, React Hook Form, Cypress, Toolkit.
+**Key Tools:** Chakra UI, React Hook Form, Cypress, Redux Toolkit.
 
 **Assigned Hooks:** useState, useEffect, useContext, useActionState, useFormStatus, useOptimistic, useDebugValue.
 
@@ -51,4 +51,4 @@ This repository is a research project on tools for using and managing React.
 ### Exercise 6: State Debugging Panel
 **Context:** Create a small debugging component that displays the state of an application.
 
-**Tech Stack:** Chakra UI, Toolkit, useDebugValue (to create custom hooks that are displayed in React DevTools), Cypress (for end-to-end testing of the application flow).
+**Tech Stack:** Chakra UI, Redux Toolkit, useDebugValue (to create custom hooks that are displayed in React DevTools), Cypress (for end-to-end testing of the application flow).
