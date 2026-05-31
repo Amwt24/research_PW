@@ -1,73 +1,256 @@
-# React + TypeScript + Vite
+# Exercise 4 - High Performance Product Search
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+High Performance Product Search is a React application designed to demonstrate modern React performance optimization techniques when working with large datasets.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The application simulates a catalog containing thousands of products and allows users to search efficiently while maintaining a smooth and responsive user experience.
 
-## React Compiler
+This project focuses on the practical use of React Performance Hooks, including:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* useTransition
+* useDeferredValue
+* useMemo
+* useId
 
-## Expanding the ESLint configuration
+The project also incorporates TypeScript, React Router, Tailwind CSS, and unit testing with Vitest.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Objectives
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+The main goals of this project are:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+* Build a responsive product search interface.
+* Optimize expensive filtering operations.
+* Improve user experience during search interactions.
+* Apply React performance optimization hooks.
+* Follow a clean and scalable project architecture.
+* Implement basic unit testing.
+
+---
+
+## Technologies Used
+
+| Technology       | Purpose                       |
+| ---------------- | ----------------------------- |
+| React            | User Interface Development    |
+| TypeScript       | Static Typing                 |
+| Tailwind CSS     | Styling and Responsive Design |
+| React Router     | Client-Side Routing           |
+| Vitest           | Unit Testing                  |
+| useTransition    | Non-Urgent State Updates      |
+| useDeferredValue | Deferred Search Processing    |
+| useMemo          | Memoized Calculations         |
+| useId            | Accessibility Improvements    |
+
+---
+
+## Features
+
+### Product Search
+
+Users can search through a large collection of products using a responsive search field.
+
+### Performance Optimization
+
+The application remains responsive even while filtering thousands of products.
+
+### Accessible Forms
+
+The search input is properly associated with its label using React's useId hook.
+
+### Responsive Layout
+
+The interface adapts to different screen sizes using Tailwind CSS.
+
+### Unit Testing
+
+Filtering logic is tested using Vitest to ensure correct functionality.
+
+---
+
+## Project Structure
+
+```text
+src
+│
+├── components
+│   ├── LoadingIndicator.tsx
+│   ├── ProductCard.tsx
+│   ├── ProductList.tsx
+│   └── SearchInput.tsx
+│
+├── hooks
+│   └── useProductSearch.ts
+│
+├── pages
+│   ├── HomePage.tsx
+│   └── ProductsPage.tsx
+│
+├── router
+│   └── AppRouter.tsx
+│
+├── store
+│   ├── productTypes.ts
+│   ├── productsData.ts
+│   └── filterProducts.ts
+│
+├── tests
+│   └── useProductSearch.test.ts
+│
+├── App.tsx
+├── main.tsx
+└── index.css
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## React Performance Hooks Used
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### useTransition
+
+Used to mark search updates as non-urgent.
+
+Benefits:
+
+* Prevents UI blocking
+* Improves typing responsiveness
+* Prioritizes user interactions
+
+Example:
+
+```tsx
+startTransition(() => {
+  setSearchTerm(value);
+});
 ```
+
+---
+
+### useDeferredValue
+
+Used to defer expensive filtering operations.
+
+Benefits:
+
+* Reduces unnecessary recalculations
+* Improves rendering performance
+* Provides smoother user experience
+
+Example:
+
+```tsx
+const deferredSearchTerm =
+  useDeferredValue(searchTerm);
+```
+
+---
+
+### useMemo
+
+Used to memoize product filtering calculations.
+
+Benefits:
+
+* Avoids repeated computations
+* Improves efficiency
+* Enhances scalability
+
+Example:
+
+```tsx
+const filteredProducts = useMemo(() => {
+  return filterProducts(
+    products,
+    deferredSearchTerm
+  );
+}, [deferredSearchTerm]);
+```
+
+---
+
+### useId
+
+Used to generate unique identifiers for form accessibility.
+
+Benefits:
+
+* Better accessibility
+* Proper label-input association
+* Unique IDs without manual creation
+
+Example:
+
+```tsx
+const inputId = useId();
+```
+
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone <https://github.com/Amwt24/research_PW.git>
+```
+
+Navigate to the project folder:
+
+```bash
+cd Exercise4Research
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+---
+
+## Running Tests
+
+Execute all unit tests:
+
+```bash
+npm run test
+```
+
+Expected result:
+
+```text
+✓ Test Files 1 passed
+✓ Tests 3 passed
+```
+
+---
+
+## Learning Outcomes
+
+Through this project, the following concepts were practiced:
+
+* React Component Architecture
+* TypeScript Integration
+* React Router Navigation
+* Tailwind CSS Layout Design
+* React Performance Optimization
+* Accessibility Best Practices
+* Custom Hooks Development
+* Unit Testing with Vitest
+* Separation of Concerns
+
+---
+
+## Conclusion
+
+This project demonstrates how modern React applications can efficiently handle large datasets while maintaining excellent user experience.
+
+By combining useTransition, useDeferredValue, useMemo, and useId, the application remains responsive, accessible, and scalable. The use of TypeScript, Tailwind CSS, React Router, and Vitest further contributes to a clean, maintainable, and professional development environment.
