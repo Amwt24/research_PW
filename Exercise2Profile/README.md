@@ -1,159 +1,277 @@
-# Frontend Development Technologies and Tools Research - Exercise 2
+# Exercise 2 - Real-Time Profile Editor
 
-## Abstract
+## Overview
 
-Modern frontend development demands strict control over the data validation lifecycle, state persistence decoupled from the component tree, and synchronous geometric manipulation of the Document Object Model (DOM). This structural combination guarantees highly interactive applications that are immune to visual inconsistencies (glitches) and possess high operational integrity.
+Real-Time Profile Editor is a React application designed to demonstrate modern form validation, external native state management, strict typing, and synchronous DOM manipulation through the implementation of an interactive user profile system.
 
-This document presents a detailed research of the technologies, libraries, and hooks allocated for the development of **Exercise 2: "Real-Time Profile Editor with Validation"**. It analyzes their official definitions, key concepts, practical code examples, strategic advantages, and common use cases within contemporary software engineering.
+The application allows users to dynamically edit their profile information, validates the data in real-time using schemas, synchronizes it automatically with browser storage without explicit "Save" buttons, and features a Premium "Glassmorphism" design with synchronous visual effects.
 
----
+This project focuses on the practical use of form libraries, schema validation, and advanced React hooks, including:
 
-## Programming Languages
+* Formik
+* Zod
+* useSyncExternalStore
+* useLayoutEffect
 
-### TypeScript
-
-#### Definition
-TypeScript is an open-source programming language developed by Microsoft that acts as a strict syntactical superset of JavaScript. Its fundamental purpose is to add optional static typing and advanced modeling capabilities, compiling down to clean, executable JavaScript in any browser or runtime environment.
-
-#### Key Features
-- **Schema-Based Type Inference:** Allows deducing complex types at compile time from logical definitions at runtime (e.g., Zod schemas).
-- **Strict Data Contracts:** Validates the exact correspondence between form properties and the user domain model.
-- **Safe DOM Manipulation:** Strictly types DOM elements and their physical properties (e.g., `HTMLDivElement`), reducing dereferencing errors.
-
-#### Advantages
-- Guarantees that any refactoring in form fields is immediately validated in the data layer.
-- Provides autocomplete and property validation within the context of third-party libraries like Formik.
-- Reduces the possibility of accidental mutations in local or external state.
+The project also incorporates TypeScript, Material UI (MUI), Vite, and unit testing with Vitest and React Testing Library.
 
 ---
 
-## UI Frameworks and Libraries
+## Objectives
 
-### React
+The main goals of this project are:
 
-#### Definition
-React is a declarative, efficient, and flexible JavaScript library developed by Meta (Facebook), designed specifically for building interactive user interfaces through reusable, isolated components with efficient rendering management.
-
-#### Key Concepts
-- **Layout and Commit Phases:** React divides its cycle into computing changes (Render), mutating the actual DOM (Commit), and the pre-paint phase where geometries are calculated.
-- **Concurrent Rendering:** Mechanism in React 18+ that allows pausing and resuming renders to maintain UI responsiveness, demanding strict consistency in data stores.
-- **Hook Referential Identity:** Guarantee of local state persistence and physical references between sequential rendering cycles.
-
-#### Advantages
-- Total decoupling between logical state and the visual representation tree.
-- Native support for synchronous DOM interception before visual screen rendering.
-- Absolute consistency of client state through specialized synchronization hooks.
-
-### Material UI (MUI v5)
-
-#### Definition
-Material UI is an open-source React component library that natively implements Google's Material Design specifications. It offers an ecosystem of pre-designed, accessible, and customizable components focused on optimizing professional layout development.
-
-#### Key Features
-- **Error State Injection:** Native properties (e.g., `error`, `helperText`) designed to directly couple with form validation handlers.
-- **Strict Container Components:** Structural layout tools (`Box`, `Stack`, `TextField`, `Paper`) that unify margin, padding, and positioning control.
-- **Memory-Based Styling:** Flexibility to read and apply dynamic styles programmatically using props, `sx`, or React hooks to achieve "Glassmorphism" and premium UI aesthetics.
+* Build a highly interactive and strictly typed profile editing form.
+* Manage and persist state entirely outside of React using Vanilla JS stores.
+* Implement declarative, real-time input validation.
+* Read and manipulate DOM dimensions synchronously before browser paints.
+* Apply modern Premium Design aesthetics (Glassmorphism).
+* Implement integration testing for form behavior.
 
 ---
 
-## Form and Syntactic Validation Libraries
+## Technologies Used
+
+| Technology             | Purpose                                      |
+| ---------------------- | -------------------------------------------- |
+| React                  | User Interface Development                   |
+| TypeScript             | Static Typing and Interface Contracts        |
+| Material UI (MUI)      | Styling, Premium Design, and Layout          |
+| Formik                 | Form State and Event Management              |
+| Zod                    | Schema Declaration and Runtime Validation    |
+| Vitest & RTL           | Unit and Integration Testing                 |
+| useSyncExternalStore   | Native External Store Synchronization        |
+| useLayoutEffect        | Synchronous DOM Measurement and Manipulation |
+
+---
+
+## Features
+
+### Profile Editing
+Users can edit their personal data (Name, Email, Biography) dynamically.
+
+### Real-Time Validation
+All fields are strictly validated on-the-fly (`onBlur` and `onChange`) against robust logical rules to prevent invalid data entry.
+
+### Auto-Save Persistence
+Data is automatically saved in real-time to the browser's `localStorage` via a native Vanilla JS store, bypassing the need for manual submissions.
+
+### Dynamic Avatar Glow
+The Avatar component calculates the length of the biography in real-time and synchronously adjusts its padding and glow intensity based on a 200-character limit constraint.
+
+### Premium Design
+The UI leverages modern "Glassmorphism" (frosted glass) effects, gradient backgrounds, and responsive centering for an immersive experience.
+
+### Unit Testing
+Zod schema rules and Formik validation integration are tested using React Testing Library to ensure visual error feedback behaves as expected.
+
+---
+
+## Project Structure
+
+```text
+src
+│
+├── components
+│   └── ProfileEditor.tsx
+│
+├── schemas
+│   └── profileSchema.ts
+│
+├── store
+│   └── profileStore.ts
+│
+├── theme
+│   └── theme.ts
+│
+├── __tests__
+│   └── ProfileEditor.test.tsx
+│
+├── App.tsx
+├── main.tsx
+├── index.css
+└── setupTests.ts
+```
+
+---
+
+## Form Validation Technologies Used
 
 ### Formik
 
-#### Definition
-Formik is a specialized open-source library for React that abstracts form control flows, handling input values manipulation, tracking visited fields (`touched`), orchestrating errors, and managing data submission.
+Formik is used to manage the form's local state, handle user input events, and track visited fields (`touched`).
 
-#### Key Concepts
-- **Formik Bag:** Central control object that exposes imperative functions and descriptive states (`handleChange`, `handleBlur`, `values`, `errors`).
-- **Visited State (Touched):** UX optimization mechanism that avoids showing error messages to the user before they have physically interacted with the field, ensuring an intuitive real-time validation experience.
+Benefits:
 
-#### Advantages
-- Centralizes logic for multiple inputs, eliminating the massive creation of individual `useState` hooks.
-- Integrates agnostically with any third-party schema-based validation engine.
-- Optimizes the submission cycle by blocking redundant interactions during asynchronous loads.
+* Centralizes state management for inputs
+* Handles blur and change events automatically
+* Eliminates massive `useState` declarations
+* Improves UX by avoiding premature error warnings
+
+Example:
+
+```tsx
+const formik = useFormik<ProfileData>({
+  initialValues: storeData,
+  validate: myValidationLogic,
+});
+```
+
+---
 
 ### Zod
 
-#### Definition
-Zod is a schema declaration and runtime type validation library primarily designed for TypeScript. It allows encoding complex validation rules in a single logical point and statically inferring the native types of the language from that definition.
+Zod is used to define the data schema and execute safe parsing to guarantee data integrity before it reaches the store.
 
-#### Key Concepts
-- **Safe Parsing (`safeParse`):** Non-destructive parsing method that intercepts data and encapsulates the result within a discriminator object (`success: true/false`), isolating detailed errors without throwing exceptions.
-- **Declarative Chaining:** Semantic syntax that allows restricting complex formats (e.g., lengths, alphanumeric patterns, regular expressions) in a single line of code.
+Benefits:
 
-#### Advantages
-- Prevents poorly structured or corrupt data from being injected into the application state.
-- Provides fully readable and localized error messages per field.
-- Guarantees perfect synchronization between actual operational rules and design-time types (`verbatimModuleSyntax`).
+* Single source of truth for types and validation rules
+* Extremely readable declarative syntax
+* `safeParse` prevents application crashes on invalid data
+
+Example:
+
+```tsx
+export const profileSchema = z.object({
+  email: z.string().email('Invalid email address'),
+});
+```
 
 ---
 
-## React Synchronization and External State Hooks
-
-### Overview
-Advanced structural and synchronization hooks in React resolve bidirectional communication between the visual interface and elements that escape the direct control of the common rendering cycle, such as DOM metric measurements in the browser and external data stores (Vanilla JS Stores).
-
-### useLayoutEffect
-
-#### Definition
-`useLayoutEffect` is a native React hook whose signature matches that of `useEffect`, but it differs in that it executes completely synchronously immediately after React has performed DOM mutations, but **before** the browser paints the content on the screen.
-
-#### Advantages
-- Eliminates visual flickering (Flash of Unstyled Content) caused by secondary state updates based on DOM measurements.
-- Allows forcing synchronous re-renders in the browser's rendering micro-cycle, guaranteeing immediate spatial consistency (e.g., adjusting the glow padding of an Avatar dynamically based on bio length).
+## React Hooks Used
 
 ### useSyncExternalStore
 
-#### Definition
-`useSyncExternalStore` is a native hook introduced in React 18 designed to securely subscribe, immune to tearing (concurrency failures), to data stores external to React's component architecture (like global memory variables or native browser APIs such as `localStorage`).
+Used to subscribe React safely to a Vanilla JS global store that handles the `localStorage` persistence, avoiding concurrent rendering issues.
 
-#### Advantages
-- Decouples pure business and local storage logic from React's visual infrastructure.
-- Strictly prevents the *tearing* phenomenon (visual inconsistency of the same state in different components during concurrent asynchronous rendering).
-- Enables transparent real-time persistence and reactive communication between independent modules or tabs.
+Benefits:
 
----
+* Decouples business logic from the React component tree
+* Prevents visual tearing
+* Automatic state restoration on page load
 
-## Testing and Quality Assurance Tools
+Example:
 
-### React Testing Library (RTL)
-
-#### Definition
-React Testing Library is a suite of utilities focused on validating React components under the philosophy of emulating real user behavior, interacting with interface elements through the semantics of the DOM accessibility tree rather than inspecting isolated internal states or methods.
-
-#### Advantages
-- Generates assertive tests resistant to internal form code refactoring.
-- Organically promotes the creation of semantic and accessible code conforming to international standards.
-
-### Vitest
-
-#### Definition
-Vitest is a next-generation automated testing framework native to Vite-based build environments. It combines the standard syntax of the Jest ecosystem with the transformation power of ECMAScript Modules (ESM) to provide instant executions.
-
-#### Advantages
-- Extreme speed in test execution thanks to the internal use of esbuild.
-- Exact sharing of alias and compilation configurations with the main development server (`vite.config.ts`).
+```tsx
+const storeData = useSyncExternalStore(
+  profileStore.subscribe,
+  profileStore.getSnapshot
+);
+```
 
 ---
 
-## Build Tools
+### useLayoutEffect
 
-### Vite
+Used to synchronously measure the `bio` field length and adjust the physical dimensions and visual effects of the Avatar container before the browser paints.
 
-#### Definition
-Vite is a modern frontend development tool structured on a two-stage architecture: it serves source code via native ES modules (ESM) in development without the need to pre-bundle files costly, and compiles to production via Rollup emitting highly optimized bundles.
+Benefits:
 
-#### Advantages
-- Ultra-fast Hot Module Replacement (HMR) that does not degrade with the size of the form or the complexity of its dependencies.
-- Immediate native support for TypeScript and JSX without invasive manual configurations.
+* Immediate visual updates without flickering
+* Perfect for animations tied to DOM layout calculations
+* Forces a synchronous micro-render
+
+Application:
+
+As the user types in the biography field, the purple glow radius around the Avatar expands proportionally to the character limit.
+
+Example:
+
+```tsx
+useLayoutEffect(() => {
+  const bioLength = formik.values.bio.length;
+  // Synchronous DOM calculations...
+  setAvatarGlow(bioLength * multiplier);
+}, [formik.values.bio]);
+```
+
+---
+
+## Profile Editor Operations
+
+### Update Name and Email
+Users enter their standard identification fields, validating standard string limits and regex email patterns.
+
+### Edit Biography
+A multiline text area where users input longer descriptions, constrained to a maximum of 200 characters.
+
+### Instant Validation Feedback
+Upon leaving a field with invalid data, an error message is instantly rendered beneath the respective input using MUI components.
+
+### Progress Indicator
+The visual intensity of the Avatar indicates how close the user is to the biography character limit.
+
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Amwt24/research_PW.git
+```
+
+Navigate to the project folder:
+
+```bash
+cd Exercise2Profile
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+---
+
+## Running Tests
+
+Execute all unit and integration tests:
+
+```bash
+npm test
+```
+
+Expected result:
+
+```text
+PASS src/__tests__/ProfileEditor.test.tsx
+
+✓ should render without crashing
+✓ should display validation errors for invalid email
+✓ should auto-save input changes
+```
+
+---
+
+## Learning Outcomes
+
+Through this project, the following concepts were practiced:
+
+* Premium Design & Glassmorphism Implementation
+* Advanced Form State Management with Formik
+* Runtime Type Validation with Zod
+* Native External Store Architecture (`useSyncExternalStore`)
+* Synchronous DOM Manipulation (`useLayoutEffect`)
+* Vanilla JS pattern integration within React
+* Unit Testing Form Behaviors
+* Separation of Concerns
 
 ---
 
 ## Conclusion
 
-The architecture defined for **Exercise 2: "Real-Time Profile Editor with Validation"** demonstrates the feasibility of building highly decoupled, high-fidelity interactive forms. By deriving syntactic validation to a typed schema in Zod and delegating event control to Formik, the system drastically reduces repetitive imperative code.
+This project demonstrates how modern React applications can achieve extreme decoupling between user interfaces, form state management, and data persistence.
 
-The introduction of advanced hooks like `useSyncExternalStore` endows the application with an immutable infrastructure of transparent local persistence in `localStorage`, immune to concurrent failures. Concurrently, `useLayoutEffect` establishes itself as the safeguard of the user's visual experience, calculating and correcting DOM dimensions and visual styles (like the Avatar's dynamic progress ring) instantaneously before the browser projects the changes onto the monitor. The ecosystem is consolidated under Vite's build speed and the structural resilience verified by Vitest and React Testing Library.
+By combining Formik, Zod, native Vanilla JS stores, `useSyncExternalStore`, and `useLayoutEffect`, the application guarantees safe data entry, real-time persistence without submit buttons, and seamless visual synchronization. The project serves as a practical example of how advanced React hooks and schema validation libraries resolve real-world complexities regarding robust form handling and glitch-free user experiences.
 
 ---
 
