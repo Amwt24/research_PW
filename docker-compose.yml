@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  exercise-5-auth-system:
+    build:
+      context: ./exercise-5-auth-system
+      target: development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./exercise-5-auth-system:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+
+  exercise-6-debugging-panel:
+    build:
+      context: ./exercise-6-debugging-panel
+      target: development
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./exercise-6-debugging-panel:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
